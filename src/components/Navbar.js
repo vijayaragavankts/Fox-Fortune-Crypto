@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Flex,
   Box,
@@ -24,23 +24,28 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const menuRef = useRef(null);
 
   const navigate = useNavigate();
 
   const navigateToHome = () => {
     navigate("/");
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const navigateToCrypto = () => {
     navigate("/cryptocurrency");
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const navigateToExchanges = () => {
     navigate("/exchange");
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const navigateToWishlist = () => {
     navigate("/wishlist");
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const toggleMenu = () => {
@@ -49,10 +54,25 @@ const Navbar = () => {
 
   const handleLogin = () => {
     navigate("/login");
+    setIsMenuOpen(!isMenuOpen);
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Flex
+      ref={menuRef}
       direction="column"
       align="center"
       bg="black"
@@ -63,6 +83,7 @@ const Navbar = () => {
       alignItems="left"
       justify="space-between"
       position="fixed"
+      zIndex={1}
     >
       <Flex
         direction={{ base: "row", md: "column" }}

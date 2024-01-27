@@ -38,3 +38,15 @@
     transform: rotate(360deg);
   }
 }
+
+
+.box-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.custom-select {
+  width: 250px;
+  border-color: green;
+}

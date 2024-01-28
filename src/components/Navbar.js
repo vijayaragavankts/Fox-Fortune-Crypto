@@ -17,9 +17,11 @@ import {
   AiOutlineHeart,
   AiOutlineMenu,
 } from "react-icons/ai";
+import { AiOutlineLogin } from "react-icons/ai";
 import logo from "../images/fox.jpg";
 import "../../src/App.css";
 import { useNavigate } from "react-router-dom";
+import AuthModal from "../Authentication/AuthModal";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -190,14 +192,16 @@ const Navbar = () => {
             <Flex mt="auto" justify="center">
               <Box
                 cursor="pointer"
-                onClick={handleLogin}
                 color="white"
                 fontSize={{ base: "md", md: "lg" }}
                 _hover={{
                   color: "blue.500",
                 }}
               >
-                Login
+                <AuthModal
+                  isMenuOpen={isMenuOpen}
+                  setIsMenuOpen={setIsMenuOpen}
+                />
               </Box>
             </Flex>
           </Box>
@@ -275,14 +279,13 @@ const Navbar = () => {
         <Flex mt="auto" justify="center">
           <Box
             cursor="pointer"
-            onClick={handleLogin}
             color="white"
             fontSize={{ base: "md", md: "lg" }}
             _hover={{
               color: "orange.500",
             }}
           >
-            Login
+            <AuthModal isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           </Box>
         </Flex>
       )}

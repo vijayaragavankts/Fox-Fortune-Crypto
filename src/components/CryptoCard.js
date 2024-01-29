@@ -6,7 +6,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Link,
   Text,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -24,6 +23,7 @@ const CryptoCard = ({ simplified }) => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  console.log(cryptos);
   const navigate = useNavigate();
 
   useEffect(() => {

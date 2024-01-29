@@ -32,6 +32,7 @@ const Login = ({ onClose }) => {
     }
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
+      console.log(result);
       toast({
         title: "Logged In successfully",
         duration: 3000,

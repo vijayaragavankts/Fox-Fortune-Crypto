@@ -36,6 +36,8 @@ const SingleCoin = () => {
   const { data: historyData, isFetching: historyFetching } =
     useGetCryptoHistoryQuery({ id, timePeriod });
 
+  console.log(detailsFetching, historyFetching);
+
   useEffect(() => {
     if (detailsData) {
       setCryptoDetails(detailsData?.data?.coin);
@@ -56,9 +58,9 @@ const SingleCoin = () => {
 
   if (!cryptoDetails) return <div>Crypto details not available.</div>;
 
-  const handleTimePeriodChange = (value) => {
-    setTimePeriod(value);
-  };
+  // const handleTimePeriodChange = (value) => {
+  //   setTimePeriod(value);
+  // };
 
   const stats = [
     {
@@ -152,7 +154,7 @@ const SingleCoin = () => {
         className="custom-select"
       >
         {time.map((e, index) => (
-          <Option key={e} value={e}>
+          <Option key={index} value={e}>
             {e}
           </Option>
         ))}

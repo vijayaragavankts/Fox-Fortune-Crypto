@@ -8,25 +8,27 @@ import {
   IconButton,
   Collapse,
   useBreakpointValue,
-  Button,
 } from "@chakra-ui/react";
 import {
   AiOutlineHome,
   AiOutlineDollarCircle,
-  AiOutlineSwap,
-  AiOutlineHeart,
   AiOutlineMenu,
 } from "react-icons/ai";
-import { AiOutlineLogin } from "react-icons/ai";
+
 import logo from "../images/fox.jpg";
 import "../../src/App.css";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "../Authentication/AuthModal";
+import SideBar from "./SideBar";
+
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const menuRef = useRef(null);
+
+  const userDetails = useSelector((state) => state.user.userDetails);
 
   const navigate = useNavigate();
 
@@ -40,22 +42,7 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const navigateToExchanges = () => {
-    navigate("/exchange");
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const navigateToWishlist = () => {
-    navigate("/wishlist");
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -106,6 +93,8 @@ const Navbar = () => {
           // fontFamily="monospace"
           textAlign={{ base: "center", md: "left" }}
           fontFamily="Akronim, system-ui"
+          cursor="pointer"
+          onClick={navigateToHome}
         >
           Fox Fortune
         </Text>
@@ -159,36 +148,7 @@ const Navbar = () => {
               <Icon as={AiOutlineDollarCircle} boxSize="6" mr="2" />
               Cryptocurrencies
             </Box>
-            <Box
-              cursor="pointer"
-              onClick={navigateToExchanges}
-              color="white"
-              mb="5"
-              display="flex"
-              alignItems="center"
-              fontSize={{ base: "md", md: "lg" }}
-              _hover={{
-                color: "blue.500",
-              }}
-            >
-              <Icon as={AiOutlineSwap} boxSize="6" mr="2" />
-              Exchange
-            </Box>
-            <Box
-              cursor="pointer"
-              onClick={navigateToWishlist}
-              color="white"
-              mb="5"
-              display="flex"
-              alignItems="center"
-              fontSize={{ base: "md", md: "lg" }}
-              _hover={{
-                color: "blue.500",
-              }}
-            >
-              <Icon as={AiOutlineHeart} boxSize="6" mr="2" />
-              Wishlist
-            </Box>
+
             <Flex mt="auto" justify="center">
               <Box
                 cursor="pointer"
@@ -198,10 +158,17 @@ const Navbar = () => {
                   color: "blue.500",
                 }}
               >
-                <AuthModal
-                  isMenuOpen={isMenuOpen}
-                  setIsMenuOpen={setIsMenuOpen}
-                />
+                {userDetails ? (
+                  <SideBar
+                    isMenuOpen={isMenuOpen}
+                    setIsMenuOpen={setIsMenuOpen}
+                  />
+                ) : (
+                  <AuthModal
+                    isMenuOpen={isMenuOpen}
+                    setIsMenuOpen={setIsMenuOpen}
+                  />
+                )}
               </Box>
             </Flex>
           </Box>
@@ -220,7 +187,7 @@ const Navbar = () => {
               alignItems="center"
               fontSize={{ base: "md", md: "lg" }}
               _hover={{
-                color: "orange.500",
+                color: "blue.500",
               }}
             >
               <Icon as={AiOutlineHome} boxSize="6" mr="2" />
@@ -235,41 +202,11 @@ const Navbar = () => {
               alignItems="center"
               fontSize={{ base: "md", md: "lg" }}
               _hover={{
-                color: "orange.500",
+                color: "blue.500",
               }}
             >
               <Icon as={AiOutlineDollarCircle} boxSize="6" mr="2" />
               Cryptocurrencies
-            </Box>
-            <Box
-              cursor="pointer"
-              onClick={navigateToExchanges}
-              color="white"
-              mb="5"
-              display="flex"
-              alignItems="center"
-              fontSize={{ base: "md", md: "lg" }}
-              _hover={{
-                color: "orange.500",
-              }}
-            >
-              <Icon as={AiOutlineSwap} boxSize="6" mr="2" />
-              Exchange
-            </Box>
-            <Box
-              cursor="pointer"
-              onClick={navigateToWishlist}
-              color="white"
-              mb="5"
-              display="flex"
-              alignItems="center"
-              fontSize={{ base: "md", md: "lg" }}
-              _hover={{
-                color: "orange.500",
-              }}
-            >
-              <Icon as={AiOutlineHeart} boxSize="6" mr="2" />
-              Wishlist
             </Box>
           </Box>
         </Collapse>
@@ -285,7 +222,14 @@ const Navbar = () => {
               color: "orange.500",
             }}
           >
-            <AuthModal isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            {userDetails ? (
+              <SideBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            ) : (
+              <AuthModal
+                isMenuOpen={isMenuOpen}
+                setIsMenuOpen={setIsMenuOpen}
+              />
+            )}
           </Box>
         </Flex>
       )}

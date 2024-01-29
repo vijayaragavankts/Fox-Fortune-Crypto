@@ -1,4 +1,11 @@
-import { Button, Flex, Input, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useToast,
+} from "@chakra-ui/react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../firebase";
@@ -6,8 +13,11 @@ import { auth } from "../firebase";
 const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
 
   const toast = useToast();
+
+  const handleClick = () => setShow(!show);
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -50,11 +60,21 @@ const Login = ({ onClose }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+
+        <InputGroup size="md">
+          <Input
+            pr="4.5rem"
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
 
         <Button colorScheme="blue" onClick={handleSubmit}>
           Login

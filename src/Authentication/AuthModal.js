@@ -1,19 +1,9 @@
 import {
-  Box,
   Button,
-  Container,
   Flex,
-  FormControl,
-  FormLabel,
   HStack,
-  Icon,
-  Input,
   Modal,
-  ModalBody,
-  ModalCloseButton,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Tab,
   TabList,
@@ -22,27 +12,67 @@ import {
   Tabs,
   Text,
   useDisclosure,
-  useMultiStyleConfig,
-  useTab,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { AiOutlineLogin } from "react-icons/ai";
 import Login from "./Login";
 import Signup from "./Signup";
+import GoogleButton from "react-google-button";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+
+const googleProvider = new GoogleAuthProvider();
 
 const AuthModal = ({ isMenuOpen, setIsMenuOpen }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
+  useEffect(() => {
+    return () => {
+      onClose(); // Close the modal when the component unmounts
+    };
+  }, [onClose]); // Include onClose in the dependency array
 
   const handleOpen = () => {
     onOpen();
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleSignInWithGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+      .then((res) => {
+        toast({
+          title: `Sign up Successful. Welcome ${res.user.email}`,
+          duration: 3000,
+          status: "success",
+          isClosable: true,
+          position: "bottom",
+        });
+        onClose();
+      })
+      .catch((err) => {
+        toast({
+          title: "Error Occurred",
+          description: err.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom",
+        });
+      });
+  };
+
   return (
     <HStack>
-      <Icon as={AiOutlineLogin} boxSize="6" mr="0" />
-      <Text onClick={handleOpen}>Login</Text>
-
+      <Button
+        onClick={handleOpen}
+        rightIcon={<AiOutlineLogin size={20} mr="0" />}
+        colorScheme="blue"
+        mb={5}
+      >
+        <Text fontSize={18}> Login </Text>
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -51,6 +81,7 @@ const AuthModal = ({ isMenuOpen, setIsMenuOpen }) => {
             bg="white"
             w="100%"
             p={4}
+            pb={0}
             borderRadius="lg"
             borderWidth="1px"
             justifyContent="center"
@@ -59,20 +90,38 @@ const AuthModal = ({ isMenuOpen, setIsMenuOpen }) => {
               <TabList>
                 <Tab width="50%"> Login </Tab>
                 <Tab width="50%"> Sign Up </Tab>
-              </TabList>{" "}
+              </TabList>
               <TabPanels>
                 <TabPanel>
                   <Login onClose={onClose} />
                 </TabPanel>
                 <TabPanel>
                   <Signup onClose={onClose} />
-                </TabPanel>{" "}
-              </TabPanels>{" "}
-            </Tabs>{" "}
-          </Flex>{" "}
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+            <Flex
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text mb={3} mt={-2}>
+                OR
+              </Text>
+              <GoogleButton
+                style={{
+                  width: "85%",
+                  outline: "none",
+                  marginBottom: 20,
+                }}
+                onClick={handleSignInWithGoogle}
+              />
+            </Flex>
+          </Flex>
         </ModalContent>
       </Modal>
     </HStack>
   );
 };
+
 export default AuthModal;

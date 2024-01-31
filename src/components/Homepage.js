@@ -1,11 +1,12 @@
 import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 
 import Loader from "./Loader";
 
 import { useGetCryptosQuery } from "../services/cryptoApi";
 import millify from "millify";
-import CryptoCard from "./CryptoCard";
+
+const CryptoCard = lazy(() => import("./CryptoCard"));
 
 const Homepage = () => {
   const { data, isFetching } = useGetCryptosQuery(10);
@@ -73,7 +74,9 @@ const Homepage = () => {
         <Text fontSize="1.8em" fontWeight={500} color="#333" mt="4" mb="4">
           Top 10 Cryptocurrencies
         </Text>
-        <CryptoCard simplified />
+        <Suspense fallback={<Loader />}>
+          <CryptoCard simplified />
+        </Suspense>
       </Flex>
     </>
   );

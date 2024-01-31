@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "./Loader";
 import millify from "millify";
@@ -18,10 +18,11 @@ import {
   useGetCryptoHistoryQuery,
 } from "../services/cryptoApi";
 import htmlreactparser from "html-react-parser";
-import LineChart from "./LineChart";
 import { Box, Flex, Table, Tbody, Td, Text, Tr } from "@chakra-ui/react";
 import { Select } from "antd";
 import { Option } from "antd/es/mentions";
+
+const LineChart = lazy(() => import("./LineChart"));
 
 const SingleCoin = () => {
   const { id } = useParams();
@@ -160,21 +161,22 @@ const SingleCoin = () => {
         ))}
       </Select>
 
-      <LineChart
-        coinHistory={coinHistory}
-        currentPrice={
-          cryptoDetails.price < 0.01 && cryptoDetails.price > 0.001
-            ? millify(cryptoDetails.price, { precision: 4 })
-            : cryptoDetails.price < 0.001
-            ? millify(cryptoDetails.price, { precision: 5 })
-            : cryptoDetails.price < 1000
-            ? millify(cryptoDetails.price, { precision: 2 })
-            : millify(cryptoDetails.price)
-        }
-        coinName={cryptoDetails?.name}
-        timePeriod={timePeriod}
-      />
-
+      <Suspense fallback={<Loader />}>
+        <LineChart
+          coinHistory={coinHistory}
+          currentPrice={
+            cryptoDetails.price < 0.01 && cryptoDetails.price > 0.001
+              ? millify(cryptoDetails.price, { precision: 4 })
+              : cryptoDetails.price < 0.001
+              ? millify(cryptoDetails.price, { precision: 5 })
+              : cryptoDetails.price < 1000
+              ? millify(cryptoDetails.price, { precision: 2 })
+              : millify(cryptoDetails.price)
+          }
+          coinName={cryptoDetails?.name}
+          timePeriod={timePeriod}
+        />
+      </Suspense>
       <Flex direction={{ base: "column", lg: "row" }}>
         <Flex direction="column" mr={{ base: "", md: "10" }}>
           <Text

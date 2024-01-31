@@ -44,9 +44,16 @@
       "react-app/jest"
     ],
     "rules": {
-    "react-hooks/exhaustive-deps": "off", 
-    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }] 
-  }
+      "react-hooks/exhaustive-deps": "off",
+      "no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": false
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [

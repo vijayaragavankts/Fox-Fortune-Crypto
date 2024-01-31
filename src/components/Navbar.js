@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { lazy, useEffect, useRef, useState, Suspense } from "react";
 import {
   Flex,
   Box,
@@ -18,10 +18,12 @@ import {
 import logo from "../images/fox.jpg";
 import "../../src/App.css";
 import { useNavigate } from "react-router-dom";
-import AuthModal from "../Authentication/AuthModal";
-import SideBar from "./SideBar";
 
 import { useSelector } from "react-redux";
+import Loader from "./Loader";
+
+const AuthModal = lazy(() => import("../Authentication/AuthModal"));
+const SideBar = lazy(() => import("./SideBar"));
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -159,15 +161,19 @@ const Navbar = () => {
                 }}
               >
                 {userDetails ? (
-                  <SideBar
-                    isMenuOpen={isMenuOpen}
-                    setIsMenuOpen={setIsMenuOpen}
-                  />
+                  <Suspense fallback={<Loader />}>
+                    <SideBar
+                      isMenuOpen={isMenuOpen}
+                      setIsMenuOpen={setIsMenuOpen}
+                    />
+                  </Suspense>
                 ) : (
-                  <AuthModal
-                    isMenuOpen={isMenuOpen}
-                    setIsMenuOpen={setIsMenuOpen}
-                  />
+                  <Suspense fallback={<Loader />}>
+                    <AuthModal
+                      isMenuOpen={isMenuOpen}
+                      setIsMenuOpen={setIsMenuOpen}
+                    />
+                  </Suspense>
                 )}
               </Box>
             </Flex>
@@ -223,12 +229,19 @@ const Navbar = () => {
             }}
           >
             {userDetails ? (
-              <SideBar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+              <Suspense fallback={<Loader />}>
+                <SideBar
+                  isMenuOpen={isMenuOpen}
+                  setIsMenuOpen={setIsMenuOpen}
+                />
+              </Suspense>
             ) : (
-              <AuthModal
-                isMenuOpen={isMenuOpen}
-                setIsMenuOpen={setIsMenuOpen}
-              />
+              <Suspense fallback={<Loader />}>
+                <AuthModal
+                  isMenuOpen={isMenuOpen}
+                  setIsMenuOpen={setIsMenuOpen}
+                />
+              </Suspense>
             )}
           </Box>
         </Flex>

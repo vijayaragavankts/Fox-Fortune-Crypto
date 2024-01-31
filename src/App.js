@@ -1,16 +1,21 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Homepage from "./components/Homepage";
 import { Flex } from "@chakra-ui/react";
-import SingleCoin from "./components/SingleCoin";
-import CryptoCard from "./components/CryptoCard";
+import { lazy, Suspense } from "react";
+import Loader from "./components/Loader";
+
+const Homepage = lazy(() => import("./components/Homepage"));
+const Navbar = lazy(() => import("./components/Navbar"));
+const SingleCoin = lazy(() => import("./components/SingleCoin"));
+const CryptoCard = lazy(() => import("./components/CryptoCard"));
 
 function App() {
   return (
     <>
       <Flex direction={{ base: "column", md: "row" }}>
-        <Navbar />
+        <Suspense fallback={<Loader />}>
+          <Navbar />
+        </Suspense>
 
         <Routes>
           <Route
@@ -23,7 +28,9 @@ function App() {
                 width={{ base: "100%", md: "auto" }}
               >
                 {/* Adjust ml (margin-left) based on Navbar width */}
-                <Homepage />
+                <Suspense fallback={<Loader />}>
+                  <Homepage />
+                </Suspense>
               </Flex>
             }
           />
@@ -36,7 +43,9 @@ function App() {
                 p="4"
                 width={{ base: "100%", md: "auto" }}
               >
-                <SingleCoin />
+                <Suspense fallback={<Loader />}>
+                  <SingleCoin />
+                </Suspense>
               </Flex>
             }
           />
@@ -50,7 +59,9 @@ function App() {
                 p="4"
                 width={{ base: "100%", md: "auto" }}
               >
-                <CryptoCard />
+                <Suspense fallback={<Loader />}>
+                  <CryptoCard />
+                </Suspense>
               </Flex>
             }
           />
